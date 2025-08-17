@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { io } from "socket.io-client";
+
+const BASE_URL = "http://localhost:5001";
 
 // tiny unique id (no extra deps)
 const genId = () =>
@@ -10,6 +13,7 @@ export const useAuthStore = create(
     (set, get) => ({
       userId: null,
       username: "",
+      socket: null,
 
       login: (name) => {
         const trimmed = String(name || "").trim();
@@ -19,10 +23,39 @@ export const useAuthStore = create(
         } else {
           set({ username: trimmed });
         }
+        get().connectSocket();
       },
 
       logout: () => {
         set({ userId: null, username: "" });
+        get().disconnectSocket();
+      },
+
+      checkAuth: () => {
+        const { userId } = get();
+        if (userId) {
+          get().connectSocket();
+          return true;
+        } else {
+          get().disconnectSocket();
+          return false;
+        }
+      },
+
+      connectSocket: () => {
+        const { userId } = get();
+        if (!userId || get().socket?.connected) return;
+        const socket = io(BASE_URL, {
+          query: {
+            userId: userId,
+          },
+        });
+        socket.connect();
+
+        set({ socket: socket });
+      },
+      disconnectSocket: () => {
+        if (get().socket?.connected) get().socket.disconnect();
       },
     }),
     {
