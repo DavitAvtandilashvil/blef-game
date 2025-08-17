@@ -1,7 +1,7 @@
 // Auth.jsx
 import { useEffect, useState } from "react";
 import { FaUser, FaDice } from "react-icons/fa";
-import { useAuthStore } from "../store/useAuthStore.";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Auth() {
   const [username, setUsername] = useState("");
