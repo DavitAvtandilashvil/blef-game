@@ -1,8 +1,18 @@
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Auth from "./pages/Auth";
+import PreGame from "./pages/PreGame";
+import Game from "./pages/Game";
+
 function App() {
   return (
-    <div>
-      <h1 className="text-red-500 text-6xl">dawda</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Navigate to="/auth" />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/pre-game" element={<PreGame />} />
+        <Route path="/game" element={<Game />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
