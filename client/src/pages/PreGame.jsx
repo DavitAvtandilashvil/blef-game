@@ -211,7 +211,7 @@ export default function PreGame() {
                 className={[
                   "mt-2 inline-flex w-full items-center justify-center rounded-xl px-4 py-3 font-medium",
                   "bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-900/30",
-                  "transition-transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30",
+                  "transition-transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30 cursor-pointer",
                   joining ? "opacity-80" : "",
                 ].join(" ")}
               >

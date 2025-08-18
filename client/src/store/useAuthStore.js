@@ -29,6 +29,7 @@ export const useAuthStore = create(
       logout: () => {
         set({ userId: null, username: "" });
         get().disconnectSocket();
+        useAuthStore.persist.clearStorage();
       },
 
       checkAuth: () => {
