@@ -1,22 +1,36 @@
-import { createRoom, joinRoom } from "../services/gameService.js";
-import { toPublicState } from "../utils/publicState.js";
+import GameRoom from "../models/gameRoom.model.js";
 
-export const createRoomCtrl = async (req, res) => {
+export const createRoom = async (req, res) => {
   try {
-    const { roomCode, host } = req.body; // host = { id, name }
-    const room = await createRoom({ roomCode, host });
-    res.json(toPublicState(room));
-  } catch (e) {
-    res.status(400).json({ error: e.message });
+    const { userId, username, roomCode } = req.body;
+
+    if (!roomCode) {
+      return res.status(400).json({ message: "Room code not found" });
+    }
+
+    const newRoom = await GameRoom.create({
+      roomCode,
+      players: [
+        {
+          id: userId,
+          name: username,
+          roomAdmin: true,
+          alive: true,
+          hand: [],
+          coins: 2,
+        },
+      ],
+      status: "lobby",
+      phase: "setup",
+      createdBy: userId,
+    });
+
+    return res.status(201).json(newRoom);
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 };
 
-export const joinRoomCtrl = async (req, res) => {
-  try {
-    const { player } = req.body;
-    const room = await joinRoom({ roomCode: req.params.roomCode, player });
-    res.json(toPublicState(room));
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
+export const joinRoom = async (req, res) => {
+  res.send("join room");
 };

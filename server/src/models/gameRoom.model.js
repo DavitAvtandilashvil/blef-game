@@ -1,18 +1,5 @@
 import mongoose from "mongoose";
 
-// ---- Card
-const cardSchema = new mongoose.Schema(
-  {
-    id: { type: String, required: true }, // unique per card instance
-    role: {
-      type: String,
-      enum: ["dictator", "mafia", "assassin", "thief", "magician"],
-      required: true,
-    },
-  },
-  { _id: false }
-);
-
 // ---- Player
 const playerSchema = new mongoose.Schema(
   {
@@ -20,7 +7,8 @@ const playerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     roomAdmin: { type: Boolean, default: false },
     alive: { type: Boolean, default: true },
-    hand: { type: [cardSchema], default: [] }, // 2 cards at start
+    hand: { type: [String] },
+    coins: { type: Number, default: 2 },
   },
   { _id: false }
 );
@@ -31,10 +19,26 @@ const gameRoomSchema = new mongoose.Schema(
     roomCode: { type: String, required: true, unique: true },
 
     // Decks
-    baseDeck: { type: [cardSchema], default: [] }, // unshuffled reference
-    deck: { type: [cardSchema], default: [] },
-    discardPile: { type: [cardSchema], default: [] },
-    drawIndex: { type: Number, default: 0 }, // pointer into deck
+    deck: {
+      type: [String],
+      default: [
+        "assassin",
+        "assassin",
+        "assassin",
+        "dictator",
+        "dictator",
+        "dictator",
+        "mafia",
+        "mafia",
+        "mafia",
+        "magician",
+        "magician",
+        "magician",
+        "thief",
+        "thief",
+        "thief",
+      ],
+    },
 
     // Players
     players: { type: [playerSchema], default: [] },
@@ -47,11 +51,9 @@ const gameRoomSchema = new mongoose.Schema(
       default: "lobby",
     },
     phase: { type: String, default: "setup" }, // e.g. setup | night | day | voting | resolve
-    turnIndex: { type: Number, default: 0 },
-    seed: { type: String }, // RNG seed for debugging/fairness
     createdBy: { type: String }, // host playerId (optional)
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true }
 );
 
 const GameRoom = mongoose.model("GameRoom", gameRoomSchema);

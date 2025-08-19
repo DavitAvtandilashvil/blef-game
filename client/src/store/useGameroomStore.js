@@ -6,12 +6,13 @@ export const useGameRoomStore = create((set) => ({
   isLoading: false,
   error: null,
 
-  createRoom: async ({ roomCode, host }) => {
+  createRoom: async (roomCode, userId, username) => {
     set({ isLoading: true, error: null });
     try {
       const { data } = await axiosInstance.post("/api/room/create-room", {
         roomCode,
-        host,
+        userId,
+        username,
       });
       set({ gameRoom: data });
       return data;

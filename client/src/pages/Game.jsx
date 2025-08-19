@@ -1,6 +1,7 @@
 import { ActionBar } from "../components/Actionbar";
 import { PlayerSeat } from "../components/PlayerSeat";
 import { StartButton } from "../components/StartButton";
+import { useGameRoomStore } from "../store/useGameroomStore";
 
 const seatPos = [
   "top-3 left-1/2 -translate-x-1/2", // top center
@@ -12,7 +13,10 @@ const seatPos = [
 ];
 
 export default function Game() {
-  // mock players to visualize the layout
+  const gameRoom = useGameRoomStore((s) => s.gameRoom);
+
+  console.log(gameRoom);
+
   const players = [
     { name: "Alice", coins: 2, isHost: true, isCurrentTurn: false },
     { name: "Bob", coins: 3, isHost: false, isCurrentTurn: false },

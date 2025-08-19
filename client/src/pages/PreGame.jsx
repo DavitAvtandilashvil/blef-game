@@ -10,6 +10,7 @@ import {
   FaDoorOpen,
 } from "react-icons/fa";
 import { useAuthStore } from "../store/useAuthStore";
+import { useGameRoomStore } from "../store/useGameroomStore";
 
 const genRoomCode = () => {
   const letters = "ABCDEFGHJKMNPQRSTUVWXYZ"; // no I/O to avoid confusion
@@ -31,6 +32,8 @@ export default function PreGame() {
   const username = useAuthStore((s) => s.username);
   const userId = useAuthStore((s) => s.userId);
   const logout = useAuthStore((s) => s.logout);
+
+  const createRoom = useGameRoomStore((s) => s.createRoom);
 
   // create
   const [roomCode, setRoomCode] = useState(genRoomCode());
@@ -57,10 +60,12 @@ export default function PreGame() {
       .replace(/\s+/g, "")
       .replace(/[^A-Z0-9-]/g, "");
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
     setCreating(true);
     // TODO: call your server/socket to create room here
+    await createRoom(roomCode, userId, username);
+    navigate(`/game/${roomCode}`);
   };
 
   const handleJoin = (e) => {
@@ -70,7 +75,6 @@ export default function PreGame() {
     setJoining(true);
     // TODO: validate/join room via socket/server
     // navigate(`/room/${code}`);
-    setTimeout(() => setJoining(false), 400); // fake delay for now
   };
 
   const handleLogout = () => {
