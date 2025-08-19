@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { app, server } from "./lib/socket.js";
+import { connectDB } from "./lib/db.js";
 
 dotenv.config();
 
@@ -13,4 +14,5 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 server.listen(PORT, () => {
   console.log("Server is runing on PORT:", +PORT);
+  connectDB();
 });
