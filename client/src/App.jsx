@@ -26,7 +26,14 @@ function App() {
             </GameProtectedRoute>
           }
         />
-        <Route path="/game" element={<Game />} />
+        <Route
+          path="/game/:roomCode"
+          element={
+            <GameProtectedRoute>
+              <Game />
+            </GameProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

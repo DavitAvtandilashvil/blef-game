@@ -61,9 +61,6 @@ export default function PreGame() {
     e.preventDefault();
     setCreating(true);
     // TODO: call your server/socket to create room here
-    // Example next step:
-    // navigate(`/room/${roomCode}`);
-    setTimeout(() => setCreating(false), 400); // fake delay for now
   };
 
   const handleJoin = (e) => {
