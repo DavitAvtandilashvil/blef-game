@@ -32,5 +32,26 @@ export const createRoom = async (req, res) => {
 };
 
 export const joinRoom = async (req, res) => {
-  res.send("join room");
+  try {
+    const { roomCode } = req.params;
+    const { userId, username } = req.body;
+
+    if (!roomCode || !userId || !username) {
+      return res
+        .status(400)
+        .json({ message: "roomCode param and {userId, username} required" });
+    }
+
+    const room = await GameRoom.findOne({ roomCode });
+    if (!room) {
+      return res.status(400).json({ message: "Room could not found" });
+    }
+
+    // Only allow joining while in lobby
+    if (room.status !== "lobby") {
+      return res.status(409).json({ message: "Game already started" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
 };
